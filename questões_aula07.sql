@@ -7,7 +7,6 @@ CREATE OR ALTER PROCEDURE dbo.student_grade_points
     @conceito VARCHAR(5)
 AS
 BEGIN
-    -- Seleciona os atributos solicitados unindo as tabelas correspondentes
     SELECT 
         s.name AS Nome_Estudante,
         s.dept_name AS Departamento_Estudante,
@@ -16,14 +15,12 @@ BEGIN
         t.semester AS Semestre_Curso,
         t.year AS Ano_Curso,
         t.grade AS Pontuacao_Alfanumerica,
-        gp.points AS Pontuacao_Numerica -- Assumindo que a view grade_points tenha a coluna 'points'
+        gp.points AS Pontuacao_Numerica
     FROM dbo.student s
     JOIN dbo.takes t 
         ON s.ID = t.ID
     JOIN dbo.course c 
         ON t.course_id = c.course_id
-    -- Fazemos um LEFT JOIN com a view grade_points (criada na atividade anterior) 
-    -- para resgatar o valor numérico da nota baseando-se na letra
     LEFT JOIN dbo.grade_points gp 
         ON t.grade = gp.grade
     WHERE t.grade = @conceito;
